@@ -25,22 +25,24 @@ class PyBind11Conan(ConanFile):
         cmake = CMake(self)
         cmake.definitions["PYBIND11_INSTALL"] = True
         cmake.definitions["PYBIND11_TEST"] = False
-        cmake.definitions["PYBIND11_CMAKECONFIG_INSTALL_DIR"] = "lib/cmake/pybind11"
+        cmake.definitions["PYBIND11_CMAKECONFIG_INSTALL_DIR"] = "."
         cmake.configure(source_folder="pybind11-%s" % self.version)
         cmake.build()
         cmake.install()
 
     def package(self):
         self.copy("LICENSE")
-        os.unlink(os.path.join(self.package_folder, "lib", "cmake", "pybind11", "pybind11Config.cmake"))
-        os.unlink(os.path.join(self.package_folder, "lib", "cmake", "pybind11", "pybind11ConfigVersion.cmake"))
+        #os.unlink(os.path.join(self.package_folder, "lib", "cmake", "pybind11", "pybind11Config.cmake"))
+        #os.unlink(os.path.join(self.package_folder, "lib", "cmake", "pybind11", "pybind11ConfigVersion.cmake"))
 
     def package_id(self):
         self.info.header_only()
 
     def package_info(self):
-        self.cpp_info.includedirs.append(os.path.join(self.package_folder, "include", "pybind11"))
-        cmake_base_path = os.path.join("lib", "cmake", "pybind11")
-        self.cpp_info.builddirs = [cmake_base_path]
-        self.cpp_info.build_modules = [os.path.join(cmake_base_path, "FindPythonLibsNew.cmake"),
-                                       os.path.join(cmake_base_path, "pybind11Tools.cmake")]
+        self.env_info.pybind11_DIR = self.package_folder
+        #self.cpp_info.includedirs.append(os.path.join(self.package_folder, "include", "pybind11"))
+        #cmake_base_path = os.path.join("lib", "cmake", "pybind11")
+        #self.cpp_info.builddirs = [cmake_base_path]
+        #self.cpp_info.build_modules = [os.path.join(cmake_base_path, "FindPythonLibsNew.cmake"),
+        #                               os.path.join(cmake_base_path, "pybind11Tools.cmake")]
+        pass
